@@ -26,6 +26,9 @@ COPY artifacts/ ./artifacts/
 COPY app_dashboard.py ./app_dashboard.py
 COPY start_server.py ./start_server.py
 
+# Train champion model inside container build layer so scikit-learn version matches
+RUN python data/generate_data.py && python -m src.train
+
 # Non-root user
 RUN useradd -m appuser
 RUN mkdir -p /app/models /app/artifacts /app/mlruns && chown -R appuser:appuser /app
