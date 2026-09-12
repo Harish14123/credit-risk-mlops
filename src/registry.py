@@ -68,7 +68,7 @@ def register_model(
 
     registry["versions"][version] = {
         "model_name": model_name,
-        "path": str(model_path.relative_to(MODELS_DIR.parent)),
+        "path": model_path.relative_to(MODELS_DIR.parent).as_posix(),
         "metrics": metrics,
         "threshold": threshold,
         "mlflow_run_id": mlflow_run_id,
@@ -100,7 +100,8 @@ def load_production_model():
     if version is None:
         raise RuntimeError("No production model registered yet. Run `python -m src.train` first.")
     entry = registry["versions"][version]
-    model_path = MODELS_DIR.parent / entry["path"]
+    rel_path = entry["path"].replace("\\", "/")
+    model_path = MODELS_DIR.parent / rel_path
     pipeline = joblib.load(model_path)
     return pipeline, version, entry
 
@@ -110,7 +111,8 @@ def load_model_version(version: str):
     if version not in registry["versions"]:
         raise ValueError(f"Unknown model version '{version}'")
     entry = registry["versions"][version]
-    model_path = MODELS_DIR.parent / entry["path"]
+    rel_path = entry["path"].replace("\\", "/")
+    model_path = MODELS_DIR.parent / rel_path
     return joblib.load(model_path), entry
 
 

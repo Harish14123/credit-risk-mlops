@@ -138,7 +138,7 @@
     },
     "v6": {
       "model_name": "logistic_regression",
-      "path": "models\\v6_logistic_regression.joblib",
+      "path": "models/v6_logistic_regression.joblib",
       "metrics": {
         "model_name": "logistic_regression",
         "precision": 0.6265223274695535,
@@ -165,7 +165,7 @@
     },
     "v7": {
       "model_name": "random_forest",
-      "path": "models\\v7_random_forest.joblib",
+      "path": "models/v7_random_forest.joblib",
       "metrics": {
         "model_name": "random_forest",
         "precision": 0.6013157894736842,
@@ -192,7 +192,7 @@
     },
     "v8": {
       "model_name": "xgboost",
-      "path": "models\\v8_xgboost.joblib",
+      "path": "models/v8_xgboost.joblib",
       "metrics": {
         "model_name": "xgboost",
         "precision": 0.5089369708372531,
@@ -219,7 +219,7 @@
     },
     "v9": {
       "model_name": "lightgbm",
-      "path": "models\\v9_lightgbm.joblib",
+      "path": "models/v9_lightgbm.joblib",
       "metrics": {
         "model_name": "lightgbm",
         "precision": 0.5256147540983607,
@@ -246,7 +246,7 @@
     },
     "v10": {
       "model_name": "catboost",
-      "path": "models\\v10_catboost.joblib",
+      "path": "models/v10_catboost.joblib",
       "metrics": {
         "model_name": "catboost",
         "precision": 0.5952970297029703,
