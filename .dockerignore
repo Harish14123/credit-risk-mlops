@@ -4,9 +4,5 @@ __pycache__
 *.pyc
 .pytest_cache
 mlruns
-models
-artifacts
 *.db
 .env
-tests
-README.md
