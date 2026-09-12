@@ -45,20 +45,24 @@ def init_db():
 
 def log_prediction(session, *, model_name, model_version, default_probability,
                     prediction, application: dict, latency_ms: float):
-    entry = PredictionLog(
-        id=str(uuid.uuid4()),
-        created_at=datetime.now(timezone.utc),
-        model_name=model_name,
-        model_version=model_version,
-        default_probability=default_probability,
-        prediction=prediction,
-        income=application.get("income"),
-        age=application.get("age"),
-        loan_amount=application.get("loan_amount"),
-        employment_years=application.get("employment_years"),
-        credit_score=application.get("credit_score"),
-        latency_ms=latency_ms,
-    )
-    session.add(entry)
-    session.commit()
-    return entry
+    try:
+        entry = PredictionLog(
+            id=str(uuid.uuid4()),
+            created_at=datetime.now(timezone.utc),
+            model_name=str(model_name),
+            model_version=str(model_version),
+            default_probability=float(default_probability),
+            prediction=str(prediction),
+            income=float(application["income"]) if application.get("income") is not None else None,
+            age=int(application["age"]) if application.get("age") is not None else None,
+            loan_amount=float(application["loan_amount"]) if application.get("loan_amount") is not None else None,
+            employment_years=float(application["employment_years"]) if application.get("employment_years") is not None else None,
+            credit_score=int(application["credit_score"]) if application.get("credit_score") is not None else None,
+            latency_ms=float(latency_ms),
+        )
+        session.add(entry)
+        session.commit()
+        return entry
+    except Exception as e:
+        session.rollback()
+        raise e
