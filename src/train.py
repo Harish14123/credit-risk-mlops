@@ -21,8 +21,10 @@ from __future__ import annotations
 
 import json
 import logging
+import os
 import time
 
+os.environ["MLFLOW_ALLOW_FILE_STORE"] = "true"
 import mlflow
 import pandas as pd
 from sklearn.model_selection import train_test_split

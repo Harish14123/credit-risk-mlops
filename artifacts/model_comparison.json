@@ -1,0 +1,117 @@
+[
+  {
+    "version": "v6",
+    "model_name": "logistic_regression",
+    "mlflow_run_id": "1d9a39b44a6b442b95af3663d5c4f6b5",
+    "train_seconds": 0.10137152671813965,
+    "precision": 0.6265223274695535,
+    "recall": 0.5421545667447307,
+    "f1": 0.581293157564344,
+    "roc_auc": 0.8509005604566803,
+    "pr_auc": 0.6524224987072104,
+    "brier_score": 0.15010549501181453,
+    "confusion_matrix": [
+      [
+        3870,
+        276
+      ],
+      [
+        391,
+        463
+      ]
+    ],
+    "threshold": 0.72
+  },
+  {
+    "version": "v10",
+    "model_name": "catboost",
+    "mlflow_run_id": "e5c79f72031f4c988207ac9d81a9c4b0",
+    "train_seconds": 3.3975110054016113,
+    "precision": 0.5952970297029703,
+    "recall": 0.563231850117096,
+    "f1": 0.5788206979542719,
+    "roc_auc": 0.8507279949297932,
+    "pr_auc": 0.6483415858129037,
+    "brier_score": 0.13822953541113894,
+    "confusion_matrix": [
+      [
+        3819,
+        327
+      ],
+      [
+        373,
+        481
+      ]
+    ],
+    "threshold": 0.67
+  },
+  {
+    "version": "v8",
+    "model_name": "xgboost",
+    "mlflow_run_id": "9b4b4054d770421a9e99c7739ca359d6",
+    "train_seconds": 0.9664108753204346,
+    "precision": 0.5089369708372531,
+    "recall": 0.6334894613583139,
+    "f1": 0.5644235785080856,
+    "roc_auc": 0.8455781425283928,
+    "pr_auc": 0.6403598865935389,
+    "brier_score": 0.1317797601222992,
+    "confusion_matrix": [
+      [
+        3624,
+        522
+      ],
+      [
+        313,
+        541
+      ]
+    ],
+    "threshold": 0.56
+  },
+  {
+    "version": "v9",
+    "model_name": "lightgbm",
+    "mlflow_run_id": "c6ce8abbc71240309e8f2f99315d993f",
+    "train_seconds": 0.5393149852752686,
+    "precision": 0.5256147540983607,
+    "recall": 0.6007025761124122,
+    "f1": 0.5606557377049181,
+    "roc_auc": 0.8400854185236526,
+    "pr_auc": 0.6401223080163104,
+    "brier_score": 0.1270907174342576,
+    "confusion_matrix": [
+      [
+        3683,
+        463
+      ],
+      [
+        341,
+        513
+      ]
+    ],
+    "threshold": 0.5700000000000001
+  },
+  {
+    "version": "v7",
+    "model_name": "random_forest",
+    "mlflow_run_id": "2d3d95d4fbc2439e910b57c26802650d",
+    "train_seconds": 1.4992027282714844,
+    "precision": 0.6013157894736842,
+    "recall": 0.5351288056206089,
+    "f1": 0.5662949194547707,
+    "roc_auc": 0.8422784976010285,
+    "pr_auc": 0.6294682060897067,
+    "brier_score": 0.13981757606282424,
+    "confusion_matrix": [
+      [
+        3843,
+        303
+      ],
+      [
+        397,
+        457
+      ]
+    ],
+    "threshold": 0.61
+  }
+]

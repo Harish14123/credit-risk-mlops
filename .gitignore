@@ -5,11 +5,9 @@ __pycache__/
 venv/
 *.egg-info/
 
-# Trained artifacts (regenerate via `python -m src.train`)
+# Trained artifacts
 mlruns/
-models/*.joblib
 artifacts/*.png
-artifacts/*.json
 artifacts/*.db
 
 # Secrets
