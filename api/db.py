@@ -46,6 +46,8 @@ def init_db():
 def log_prediction(session, *, model_name, model_version, default_probability,
                     prediction, application: dict, latency_ms: float):
     entry = PredictionLog(
+        id=str(uuid.uuid4()),
+        created_at=datetime.now(timezone.utc),
         model_name=model_name,
         model_version=model_version,
         default_probability=default_probability,

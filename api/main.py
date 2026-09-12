@@ -98,35 +98,41 @@ def predict(application: LoanApplication):
     if model_service.pipeline is None:
         raise HTTPException(status_code=503, detail="Model not loaded. Train a model first.")
 
-    record = application.model_dump()
-    business_errors = validate_inference_row(record)
-    if business_errors:
-        raise HTTPException(status_code=422, detail=business_errors)
-
-    t0 = time.time()
-    proba = model_service.predict_one(record)
-    latency_ms = (time.time() - t0) * 1000
-
-    response = _to_response(proba)
-
     try:
-        session = SessionLocal()
-        try:
-            log_prediction(
-                session,
-                model_name=response.model_name,
-                model_version=response.model_version,
-                default_probability=response.default_probability,
-                prediction=response.prediction,
-                application=record,
-                latency_ms=latency_ms,
-            )
-        finally:
-            session.close()
-    except Exception as e:
-        logger.warning(f"Failed to log prediction to DB: {e}")
+        record = application.model_dump()
+        business_errors = validate_inference_row(record)
+        if business_errors:
+            raise HTTPException(status_code=422, detail=business_errors)
 
-    return response
+        t0 = time.time()
+        proba = model_service.predict_one(record)
+        latency_ms = (time.time() - t0) * 1000
+
+        response = _to_response(proba)
+
+        try:
+            session = SessionLocal()
+            try:
+                log_prediction(
+                    session,
+                    model_name=response.model_name,
+                    model_version=response.model_version,
+                    default_probability=response.default_probability,
+                    prediction=response.prediction,
+                    application=record,
+                    latency_ms=latency_ms,
+                )
+            finally:
+                session.close()
+        except Exception as e:
+            logger.warning(f"Failed to log prediction to DB: {e}")
+
+        return response
+    except HTTPException:
+        raise
+    except Exception as e:
+        logger.exception(f"Error processing prediction: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
 
 
 @app.post("/predict/batch", response_model=BatchPredictionResponse)
