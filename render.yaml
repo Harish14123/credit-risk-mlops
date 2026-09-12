@@ -1,0 +1,31 @@
+# Infrastructure-as-code for Render.com (free/low-cost tier) — one of several
+# valid targets; the same Docker image also runs unchanged on AWS App Runner,
+# Azure Container Apps, GCP Cloud Run, or an EC2/VM + docker-compose.
+#
+# Deploy: push this repo to GitHub, then "New +" -> "Blueprint" in Render,
+# pointing at this file. It provisions a managed Postgres DB and a web
+# service running the Dockerfile, wired together automatically.
+databases:
+  - name: credit-risk-db
+    plan: free
+    databaseName: credit_risk
+    user: mluser
+
+services:
+  - type: web
+    name: credit-risk-api
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: credit-risk-db
+          property: connectionString
+      - key: MLFLOW_TRACKING_URI
+        value: file:./mlruns
+    # NOTE: the model registry (models/registry.json + *.joblib) must be
+    # baked into the image or trained via a Render "Job" before first
+    # deploy, since the free tier has no persistent disk across deploys.
+    # See README "Deploying" section for the two supported approaches.

@@ -1,0 +1,19 @@
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+*.egg-info/
+
+# Trained artifacts (regenerate via `python -m src.train`)
+mlruns/
+models/*.joblib
+artifacts/*.png
+artifacts/*.json
+artifacts/*.db
+
+# Secrets
+.env
+
+# OS
+.DS_Store

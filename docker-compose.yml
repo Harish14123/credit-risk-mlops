@@ -1,0 +1,81 @@
+version: "3.9"
+
+# Full local stack:
+#   postgres  - stores prediction logs (monitoring)
+#   mlflow    - experiment tracking UI (http://localhost:5000)
+#   trainer   - one-off job: runs the full training pipeline, writes
+#               models/registry.json + artifacts to shared volumes
+#   api       - serves /predict, reads the trained model from the shared volume
+#
+# Usage:
+#   docker compose up -d postgres mlflow
+#   docker compose run --rm trainer        # trains models, populates registry
+#   docker compose up -d api               # now serves the champion model
+#
+# Or simply: docker compose up --build     # trainer runs once, then api starts
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: mluser
+      POSTGRES_PASSWORD: mlpassword
+      POSTGRES_DB: credit_risk
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U mluser -d credit_risk"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  mlflow:
+    image: python:3.11-slim
+    working_dir: /mlflow
+    command: >
+      bash -c "pip install --no-cache-dir mlflow==2.15.1 psycopg2-binary==2.9.9 &&
+               mlflow server --host 0.0.0.0 --port 5000
+               --backend-store-uri /mlflow/mlruns
+               --default-artifact-root /mlflow/mlruns"
+    ports:
+      - "5000:5000"
+    volumes:
+      - mlflow_data:/mlflow/mlruns
+
+  trainer:
+    build: .
+    command: ["python", "-m", "src.train"]
+    environment:
+      MLFLOW_TRACKING_URI: http://mlflow:5000
+      DATABASE_URL: postgresql://mluser:mlpassword@postgres:5432/credit_risk
+    depends_on:
+      postgres:
+        condition: service_healthy
+      mlflow:
+        condition: service_started
+    volumes:
+      - model_data:/app/models
+      - artifact_data:/app/artifacts
+
+  api:
+    build: .
+    ports:
+      - "8000:8000"
+    environment:
+      DATABASE_URL: postgresql://mluser:mlpassword@postgres:5432/credit_risk
+      MLFLOW_TRACKING_URI: http://mlflow:5000
+    depends_on:
+      postgres:
+        condition: service_healthy
+    volumes:
+      - model_data:/app/models
+      - artifact_data:/app/artifacts
+    restart: unless-stopped
+
+volumes:
+  pg_data:
+  mlflow_data:
+  model_data:
+  artifact_data:
