@@ -2,6 +2,7 @@
 Streamlit Web Dashboard for Credit Risk / Loan Default Prediction
 Connects to the FastAPI backend (or directly loads champion model) to provide an interactive UI.
 """
+import os
 import streamlit as st
 import requests
 import json
@@ -16,7 +17,7 @@ st.set_page_config(
     initial_sidebar_state="expanded",
 )
 
-API_BASE_URL = "http://127.0.0.1:8000"
+API_BASE_URL = os.getenv("API_BASE_URL", "https://credit-risk-api-lmw6.onrender.com")
 
 st.title("💳 Credit Risk / Loan Default Prediction System")
 st.markdown("Production-grade MLOps loan risk scoring system powered by FastAPI & scikit-learn.")
