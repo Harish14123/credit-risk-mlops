@@ -5,13 +5,16 @@ import sys
 import subprocess
 import time
 
+if hasattr(sys.stdout, "reconfigure"):
+    sys.stdout.reconfigure(encoding="utf-8")
+
 def start_api():
     print("🚀 Starting FastAPI Server on http://0.0.0.0:8000 ...")
-    return subprocess.Popen(["uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"])
+    return subprocess.Popen([sys.executable, "-m", "uvicorn", "api.main:app", "--host", "0.0.0.0", "--port", "8000"])
 
 def start_dashboard():
     print("🎨 Starting Streamlit Dashboard on http://0.0.0.0:8501 ...")
-    return subprocess.Popen(["streamlit", "run", "app_dashboard.py", "--server.port", "8501", "--server.address", "0.0.0.0", "--server.headless", "true"])
+    return subprocess.Popen([sys.executable, "-m", "streamlit", "run", "app_dashboard.py", "--server.port", "8501", "--server.address", "0.0.0.0", "--server.headless", "true"])
 
 if __name__ == "__main__":
     mode = sys.argv[1] if len(sys.argv) > 1 else "both"
